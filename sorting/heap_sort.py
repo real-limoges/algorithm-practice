@@ -58,6 +58,15 @@ def build_max_heap(lst):
   return lst
 
 def heap_sort(lst):
+  '''
+  INPUTS: Unordered list
+  OUTPUTS: Decremented sorted list
+
+  Takes in an unordered list, builds a max heap, repeatedly grabs
+  max element and stores in a new list (s_lst)  Returns the list in
+  decreasing order
+  '''
+
   s_lst = []
 
   build_max_heap(lst)
