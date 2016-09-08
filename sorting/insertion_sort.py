@@ -35,6 +35,3 @@ def insertion_sort(lst):
           i -= 1
   return lst
 
-lst = []
-print lst
-print insertion_sort(lst)
