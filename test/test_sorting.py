@@ -7,7 +7,7 @@ from sorting.heap_sort import build_max_heap, heap_sort
 #TODO
 '''
 Test heap_sort's max_heapify
-
+Test all of bst_sort
 '''
 
 def test_insertion_sort_empty():
