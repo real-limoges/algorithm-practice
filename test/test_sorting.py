@@ -1,6 +1,6 @@
 from nose.tools import assert_equals
 
-from insertion_sort import insertion_sort
+from sorting.insertion_sort import insertion_sort
 
 def test_empty_insertion_sort():
   lst = []
