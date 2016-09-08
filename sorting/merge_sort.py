@@ -48,11 +48,3 @@ def merge_sort(lst):
   right = merge_sort(lst[mid:])
 
   return merge(left, right)
-
-l_empty = []
-r_empty = []
-l = [1,3,5]
-r = [2,4,6]
-
-print merge(l_empty, r)
-print merge(l, r_empty)
