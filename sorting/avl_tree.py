@@ -18,41 +18,8 @@ class Node:
 
   def __init__(self, value):
     self.value = value
-    self.height = 0
     self.l_child = None
     self.r_child = None
-
-
-  def set_height(self):
-    '''
-    Sets the height for the tree
-    '''
-    
-    if self.l_child is None and self.r_child is None:
-      self.height = 0
-    elif self.l_child is not None and self.r_child is None:
-      self.height = self.l_child.height + 1
-    elif self.l_child is None and self.r_child is not None:
-      self.height = self.r_child.height + 1
-    else:
-      self.height = max(self.l_child.height, self.r_child.height) + 1
-   
-
-  def set_l_child(self, node):
-    '''
-    Sets the l_child
-    '''
-
-    self.l_child = node
-
-
-  def set_r_child(self, node):
-    '''
-    Sets the r_child
-    '''
-
-    self.r_child = node
-
 
 
 class AVL_Tree:
@@ -63,44 +30,139 @@ class AVL_Tree:
   by at most +- 1. Maintenance in log(n) time.
   '''
 
-  def __init__(self, root=None):
-    self.root = root
+  def __init__(self):
+    self.root = None
+    self.height = -1
+    self.balance = 0
 
-  def set_root(self, root):
+
+  def insert_node(self, val):
     '''
-    Sets the root of the tree
+    Inserts a node into the AVL_Tree
+    '''
+    
+    node = Node(val)
+    
+    if self.root is None:
+      self.root = node
+      self.root.l_child = AVL_Tree()
+      self.root.r_child = AVL_Tree()
+    
+    elif node.value < self.root.value:
+      self.root.l_child.insert_node(val)
+    
+    else:
+      self.root.r_child.insert_node(val)
+
+    self.rebalance_tree()
+
+
+  def rebalance_tree(self):
+    '''
+    Rebalances the AVL_Tree. Called after every insert/delete.
+    '''
+    
+    self.update_height(recursive = False)
+    self.update_balance(False)
+
+    # If the balance is over 1 or under -1, then it breaks the
+    # AVL_Tree invariant
+    while self.balance < -1 or self.balance > 1:
+      if self.balance > 1:
+        if self.root.l_child.balance < 0:
+          self.root.l_child.left_rotate()
+          self.update_height()
+          self.update_balance()
+  
+        self.right_rotate()
+        self.update_height()
+        self.update_balance()
+      
+      elif self.balance < -1:
+        if self.root.r_child.balance > 0:
+          self.root.r_child.right_rotate()
+          self.update_height()
+          self.update_balance()
+        self.left_rotate() 
+        self.update_height()
+        self.update_balance()
+  
+  
+  def update_height(self, recursive=True):
+    '''
+    Updates the height for each node.
     '''
 
-    self.root = root
+    if self.root is not None:
+      if recursive is True:
+        if self.root.l_child is not None:
+          self.root.l_child.update_height()
+        if self.root.r_child is not None:
+          self.root.r_child.update_height()
+      self.height = 1 + max(self.root.l_child.height,
+                            self.root.r_child.height)
+     
+    else:
+      self.height = -1
+
+  
+  def update_balance(self, recursive=True):
+    '''
+    Updates the balance for each node
+    '''
+
+    if self.root is not None:
+      if recursive == True:
+        if self.root.l_child is not None:
+          self.root.l_child.update_balance()
+        if self.root.r_child is not None:
+          self.root.r_child.update_balance()
+      
+      self.balance = self.root.l_child.height - self.root.r_child.height
+    
+    else:
+      self.balance = 0
 
 
-  def left_rotate(self):
+  def right_rotate(self):
     '''
     Rotates the AVL_Tree to the left
     '''
 
-  def right_rotate(self):
+    new_root = self.root.l_child.root
+    new_left_subtree = new_root.r_child.root
+    old_root = self.root
+
+    self.root = new_root
+    old_root.l_child.root = new_left_subtree
+    new_root.r_child.root = old_root
+
+
+  def left_rotate(self):
     '''
     Rotates the AVL_Tree to the right
     '''
 
+    new_root = self.root.r_child.root
+    new_right_subtree = new_root.l_child.root
+    old_root = self.root
 
-def insert_node(root, node):
-  '''
-  Inserts a node
-  '''
+    self.root = new_root
+    old_root.r_child.root = new_right_subtree
+    new_root.l_child.root = old_root
 
-  if root.value > node.value:
-    if root.l_child is None:
-      root.l_child = node
-    else:
-      insert_node(root.l_child, node)
-  else:
-    if root.r_child is None:
-      root.r_child = node
-    else:
-      insert_node(root.r_child, node)
 
+  def print_inorder(self):
+    result = []
+
+    if self.root is None:
+      return result
+
+    result.extend(self.root.l_child.print_inorder())
+    result.append(self.root.value)
+    result.extend(self.root.r_child.print_inorder())
+
+    return result
 
 lst = [41, 20, 65, 11, 29, 26, 60, 26, 23]
 
@@ -108,10 +170,6 @@ lst = [41, 20, 65, 11, 29, 26, 60, 26, 23]
 tree = AVL_Tree()
 
 for item in lst:
-  if tree.root is None:
-    tree.set_root( Node(item) )
-  else:
-    insert_node(tree.root, Node(item))
+  tree.insert_node(item)
 
-
-print tree.root.value
+print tree.print_inorder()
