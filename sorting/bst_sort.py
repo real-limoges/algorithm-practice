@@ -9,31 +9,75 @@ key(y) <= key(x) If y is in the right subtree, key(y) >= key(x)
 
 '''
 
+# Class Declarations
+
 class Node:
+  '''
+  Node:
+    This is a data point in the binary search tree.
+
+    Attributes:
+      Value - This is the key for the Node
+      L_Child - The left child. Always less than the parent
+      R_Child - The right child. Always greater than or equal to the parent
+
+  '''
+
   def __init__(self, value):
     self.value = value
     self.l_child = None
     self.r_child = None
   
   def add_l_child(self, l_child):
+    '''
+    Sets the l_child for the Node
+    '''
+
     self.l_child = l_child
 
   def add_r_child(self, r_child):
+    '''
+    Sets the r_child for the Node
+    '''
+
     self.r_child = r_child
 
   def print_val(self):
+    '''
+    Prints the value of the Node to the terminal
+    '''
+
     print self.value
 
+
 class Tree:
-  def __init__(self, root=None):
+  '''
+  Tree:
+    This is the structure holding the BST.
+
+    Attributes:
+      Root - This is a pointer to the root of the tree
+  '''
+
+def __init__(self, root=None):
     self.root = root
 
   def has_root(self):
+    '''
+    Returns if the Tree has a root. Default setup of Tree is None
+    '''
+    
     return self.root is None
 
+
   def set_root(self, root):
+    '''
+    Sets the root of the Tree with given passed Node 
+    '''
+    
     self.root = root
-  
+
+
   def count_nodes(self):
     '''
     INPUTS: None
@@ -46,6 +90,7 @@ class Tree:
     if self.root is not None:
       return self._count_nodes(self.root)
     return 0
+
 
   def _count_nodes(self, node):
     '''
@@ -65,6 +110,10 @@ class Tree:
     else:
       return (1 + self._count_nodes(node.l_child) +
                   self._count_nodes(node.r_child) )
+
+
+# Function Declarations
+
 
 def insert_node(root, node):
   '''
@@ -125,8 +174,3 @@ def bst_sort(lst):
   inorder(myTree.root, s_lst)
 
   return s_lst
-
-lst = [5,2,4,6,1,3]
-
-print bst_sort(lst)
-bst_sort(lst)
