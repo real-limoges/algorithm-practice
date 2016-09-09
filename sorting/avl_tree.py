@@ -126,7 +126,7 @@ class AVL_Tree:
 
   def right_rotate(self):
     '''
-    Rotates the AVL_Tree to the left
+    Rotates the AVL_Tree to the right
     '''
 
     new_root = self.root.l_child.root
@@ -140,7 +140,7 @@ class AVL_Tree:
 
   def left_rotate(self):
     '''
-    Rotates the AVL_Tree to the right
+    Rotates the AVL_Tree to the left
     '''
 
     new_root = self.root.r_child.root
@@ -152,15 +152,23 @@ class AVL_Tree:
     new_root.l_child.root = old_root
 
 
-  def print_inorder(self):
+  def avl_sort(self):
+    '''
+    Returns an inorder traversal of the AVL_Tree. Since the AVL_Tree
+    is a BST, an inorder traversal takes O(n) to print once constructed.
+
+    INPUT: None
+    OUTPUT: List (In-Order Traversal)
+    '''
+    
     result = []
 
     if self.root is None:
       return result
 
-    result.extend(self.root.l_child.print_inorder())
+    result.extend(self.root.l_child.avl_sort())
     result.append(self.root.value)
-    result.extend(self.root.r_child.print_inorder())
+    result.extend(self.root.r_child.avl_sort())
 
     return result
 
@@ -172,4 +180,4 @@ tree = AVL_Tree()
 for item in lst:
   tree.insert_node(item)
 
-print tree.print_inorder()
+print tree.avl_sort()
